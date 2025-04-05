@@ -41,3 +41,37 @@ def text_node_to_html_node(text_node):
         case _:
             raise Exception(f"Not a valid type {text_node.text_type}")
 
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    new_nodes = []
+
+    for old in old_nodes:
+        if old.text_type != TextType.TEXT:
+            new_nodes.append(old)
+            continue
+        
+        #text = old.text
+        lst = old.text.split(delimiter)
+        to_add = []
+
+        # a delimeter always adds 3 values to the lst ' ' whats inside the delimeter and ' '
+        # therefore lst must be odd since odd + num always odd
+        if len(lst) % 2 == 0:
+            raise Exception("no closing delimiter")
+        i = 0
+        
+        for new in lst:
+            if new == '':
+                i += 1
+                continue
+            # same idea odd i values will always be within the delimiter
+            elif i % 2 == 0:
+                to_add.append(TextNode(new, TextType.TEXT))
+            else:
+                to_add.append(TextNode(new, text_type))
+            
+            i += 1
+        
+        for x in to_add:
+            new_nodes.append(x)
+
+    return new_nodes
