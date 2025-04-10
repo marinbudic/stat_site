@@ -1,6 +1,6 @@
 import unittest
 
-from extract import extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
+from extract import extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes, extract_title
 from textnode import TextNode, TextType
 
 class TestExtract(unittest.TestCase):
@@ -102,3 +102,27 @@ class TestExtract(unittest.TestCase):
             ],
             nodes,
         )
+
+    def test_extract_title(self):
+        ext = extract_title("# Heading")
+        self.assertEqual(ext, "Heading")
+
+        ext = extract_title("This is going to work \n\n\n What on earth \n# Another Heading")
+        self.assertEqual(ext, "Another Heading")
+
+        ext = "This is not going to work \n\n\n What on earth \n ## Another Heading"
+        with self.assertRaises(Exception):
+            extract_title(ext)
+
+        ext = extract_title("#      Extra spaces     ")
+        self.assertEqual(ext, "Extra spaces")
+        
+        ext = extract_title("# ")
+        self.assertEqual(ext, "")
+
+        ext = extract_title("# First Heading\n# Second Heading")
+        self.assertEqual(ext, "First Heading")
+
+        ext = "## Not an h1"
+        with self.assertRaises(Exception):
+            extract_title(ext)

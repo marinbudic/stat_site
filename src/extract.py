@@ -81,3 +81,12 @@ def text_to_textnodes(text):
     nodes = split_nodes_image(nodes)
     nodes = split_nodes_link(nodes)
     return nodes
+
+def extract_title(markdown):
+    lines = markdown.split("\n")
+
+    for line in lines:
+        if line.startswith("# "):
+            return line.lstrip("#").strip()
+    
+    raise Exception("No level one heading in markdown")

@@ -137,5 +137,3 @@ def markdown_to_html_node(markdown):
     parent = ParentNode("div", children, None)
 
     return parent
-
-print(markdown_to_html_node("```code```"))
